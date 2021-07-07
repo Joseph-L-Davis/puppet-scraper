@@ -12,8 +12,13 @@ const marketplace = 'https://www.facebook.com/marketplace';
 
 
 (async () => {
+  try {
+    
   //open browser and login
-  const browser = await puppeteer.launch({ headless: false, defaultViewport: null });
+  const browser = await puppeteer.launch();
+  //to see browser live copy into launch()
+  // { headless: false, defaultViewport: null }
+  
   const page = await browser.newPage();
   await page.goto(marketplace);
 
@@ -25,12 +30,9 @@ const marketplace = 'https://www.facebook.com/marketplace';
 
   await page.keyboard.press('Enter')
 
- 
-
-  // await page.goto('http://www.facebook.com/marketplace', { waitUntil: 'networkidle0' });
-  await page.waitForNavigation()
 
   //grab html elements
+  //include sinceListed searchParam
   const grabMarketPlaceEntries = await page.evaluate(() => {
     const titleTags = [...document.querySelectorAll('img')].map(element => {
      return { 
@@ -42,7 +44,11 @@ const marketplace = 'https://www.facebook.com/marketplace';
 
     return titleTags;
   });
-  console.log(grabMarketPlaceEntries); 
+  console.log(grabMarketPlaceEntries, grabMarketPlaceEntries.length); 
   await browser.close();
+
+} catch (error) {
+    console.error(error)
+}
 })();
 
