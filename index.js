@@ -12,23 +12,37 @@ const marketplace = 'https://www.facebook.com/marketplace';
 
 
 (async () => {
+  //open browser and login
   const browser = await puppeteer.launch({ headless: false, defaultViewport: null });
   const page = await browser.newPage();
   await page.goto(marketplace);
 
   await page.waitForSelector('input[name=email]');
+  await page.waitForSelector('input[name=pass]');
 
-  page.evaluate(() => {
-    // const email = document.querySelector('input[name=email]');
-    const email = document.getElementsByName('email');
-    // const password = document.getElementsByName('pass');
-    return email.innerHTML;
-    
-  })
-    .then(email => console.log(email));
-  
+  await page.type('input[name=email]', 'gabrielsimek@outlook.com')
+  await page.type('input[name=pass]', myPass)
 
-//   await page.type(email, myEmail);
-//   await page.type(password, myPass);
+  await page.keyboard.press('Enter')
+
+ 
+
+  // await page.goto('http://www.facebook.com/marketplace', { waitUntil: 'networkidle0' });
+  await page.waitForNavigation()
+
+  //grab html elements
+  const grabMarketPlaceEntries = await page.evaluate(() => {
+    const titleTags = [...document.querySelectorAll('img')].map(element => {
+     return { 
+       name: element.alt,
+       src: element.src
+    }
+    //filter for price?
+    });
+
+    return titleTags;
+  });
+  console.log(grabMarketPlaceEntries); 
+  await browser.close();
 })();
 

@@ -6,15 +6,18 @@ import puppeteer from 'puppeteer';
   const page = await browser.newPage();
 
   await page.goto('http://www.facebook.com/marketplace', { waitUntil: 'networkidle0' });
-  //try to get unique identifiers
-  const grabMarketpalceEntries = await page.evaluate(() => {
-    const titleTags = [...document.querySelectorAll('img')].map(element => element.alt);
-    //  const titles = []
-    //  titleTags.forEach((element) => {
-    //    titles.push(element.innerHTML)
-    //  })
+
+  const grabMarketPlaceEntries = await page.evaluate(() => {
+    const titleTags = [...document.querySelectorAll('img')].map(element => {
+     return { 
+       name: element.alt,
+       src: element.src
+    }
+    //filter for price?
+    });
+
     return titleTags;
   });
-  console.log(grabMarketpalceEntries); 
+  console.log(grabMarketPlaceEntries); 
   await browser.close();
 })();
