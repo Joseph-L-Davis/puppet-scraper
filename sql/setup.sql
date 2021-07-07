@@ -1,0 +1,8 @@
+DROP TABLE IF EXISTS posts,
+users;
+CREATE TABLE posts (
+    id BIGINT GENERATED ALWAYS AS IDENTITY,
+    name TEXT NOT NULL,
+    src TEXT NOT NULL,
+    price TEXT
+)
